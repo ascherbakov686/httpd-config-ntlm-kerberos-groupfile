@@ -1,0 +1,50 @@
+       readonlyrest:
+         enable: true
+         ssl:
+            enable: false
+         response_if_req_forbidden: Forbidden by ReadonlyREST ES plugin
+         prompt_for_basic_auth: false
+         access_control_rules:
+          - name: "allow-grp1-users"
+            methods: [GET,POST]
+            type: allow
+            headers: ["X-Forwarded-Group:esearch-restrict-grp1"]
+            indices: ["indx4*","indx5*"]
+            proxy_auth:
+              proxy_auth_config: "group"
+              users: ["*"]
+          - name: "allow-grp2-users"
+            methods: [GET,POST]
+            type: allow
+            headers: ["X-Forwarded-Group:esearch-restrict-grp2"]
+            indices: ["indx1*","indx2*","indx3*"]
+            proxy_auth:
+              proxy_auth_config: "group"
+              users: ["*"]
+          - name: "allow-grp3-users"
+            methods: [GET,POST]
+            type: allow
+            headers: ["X-Forwarded-Group:esearch-restrict-grp3"]
+            indices: ["*"]
+            proxy_auth:
+              proxy_auth_config: "group"
+              users: ["*"]
+          - name: "cerebro"
+            methods: [GET,POST,PUT,HEAD,DELETE]
+            type: allow
+            hosts: ["10.10.106.0/24"]
+            headers: ["User-Agent:AHC/2.0"]
+            indices: ["*"]
+          - name: "coordinator"
+            methods: [GET,POST,PUT,HEAD]
+            type: allow
+            hosts: ["10.10.67.0/24","10.10.66.0/24","10.10.52.123/32"]
+            indices: ["*"]
+          - name: "monitoring"
+            methods: [GET,POST,PUT,HEAD]
+            type: allow
+            hosts: ["10.10.106.16/32", "10.10.106.17/32", "10.10.106.111/32", "10.10.106.112/32", "10.10.106.113/32", "10.10.106.114/32", "10.10.106.115/32", "10.10.106.116/32", "10.10.106.117/32", "10.10.106.118/32", "10.10.106.119/32", "10.10.106.120/32", "10.10.106.121/32", "10.10.106.122/32", "10.10.106.123/32", "10.10.106.124/32", "10.10.106.125/32", "10.10.106.126/32", "10.10.106.127/32", "10.10.106.128/32", "10.10.106.129/32", "10.10.106.130/32", "10.10.106.131/32", "10.10.106.132/32", "10.10.106.133/32", "10.10.106.134/32", "10.10.106.135/32", "10.10.106.136/32"]
+            indices: ["*"]
+         proxy_auth_configs:
+           - name: "group"
+             user_id_header: "X-Forwarded-Group"
